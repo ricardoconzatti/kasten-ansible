@@ -4,6 +4,7 @@
 
   vars:
     kubeconfig: "/etc/rancher/k3s/k3s.yaml"
+    longhornVersion: "1.9.0"
 
   tasks:
 
@@ -19,10 +20,10 @@
 
     - name: Install Longhorn
       shell: >
-        helm install longhorn longhorn/longhorn
+        helm upgrade --install longhorn longhorn/longhorn
         --namespace longhorn-system
         --create-namespace
-        --version 1.9.0
+        --version "{{ longhornVersion }}"
       args:
         creates: /var/lib/rancher/k3s/server/manifests/longhorn.yaml
       environment:
