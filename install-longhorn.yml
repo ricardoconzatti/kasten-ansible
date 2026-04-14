@@ -1,0 +1,29 @@
+- name: Install Longhorn
+  hosts: all
+  become: yes
+
+  vars:
+    kubeconfig: "/etc/rancher/k3s/k3s.yaml"
+
+  tasks:
+
+    - name: Add Longhorn repo
+      shell: helm repo add longhorn https://charts.longhorn.io
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
+
+    - name: Update Helm repos
+      shell: helm repo update
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
+
+    - name: Install Longhorn
+      shell: >
+        helm install longhorn longhorn/longhorn
+        --namespace longhorn-system
+        --create-namespace
+        --version 1.9.0
+      args:
+        creates: /var/lib/rancher/k3s/server/manifests/longhorn.yaml
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
