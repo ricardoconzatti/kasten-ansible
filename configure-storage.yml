@@ -1,0 +1,54 @@
+- name: Configure Storage and Snapshot Classes
+  hosts: all
+  become: yes
+
+  vars:
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+
+  tasks:
+
+    - name: Create Longhorn single replica StorageClass
+      kubernetes.core.k8s:
+        kubeconfig: "{{ kubeconfig }}"
+        state: present
+        definition:
+          apiVersion: storage.k8s.io/v1
+          kind: StorageClass
+          metadata:
+            name: longhorn-single-replica
+            annotations:
+              storageclass.kubernetes.io/is-default-class: "true"
+          provisioner: driver.longhorn.io
+          parameters:
+            numberOfReplicas: "1"
+          reclaimPolicy: Delete
+          volumeBindingMode: WaitForFirstConsumer
+          allowVolumeExpansion: true
+
+    - name: Create VolumeSnapshotClass for Longhorn
+      kubernetes.core.k8s:
+        kubeconfig: "{{ kubeconfig }}"
+        state: present
+        definition:
+          apiVersion: snapshot.storage.k8s.io/v1
+          kind: VolumeSnapshotClass
+          metadata:
+            name: longhorn-snapshot
+            annotations:
+              k10.kasten.io/is-snapshot-class: "true"
+          driver: driver.longhorn.io
+          deletionPolicy: Delete
+          parameters:
+            type: snap
+
+    - name: Remove default from local-path
+      shell: kubectl patch storageclass local-path -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
+      ignore_errors: yes
+
+    - name: Remove default from longhorn
+      shell: kubectl patch storageclass longhorn -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
+      ignore_errors: yes
