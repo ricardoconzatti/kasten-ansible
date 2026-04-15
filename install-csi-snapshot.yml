@@ -3,37 +3,37 @@
   become: yes
 
   vars:
-    kubeconfig: /etc/rancher/k3s/k3s.yaml
     snapshot_version: v6.2.1
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
 
   tasks:
 
     - name: Apply VolumeSnapshotClass CRD
-      kubernetes.core.k8s:
-        state: present
-        src: "https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/{{ snapshot_version }}/client/config/crd/snapshot.storage.k8s.io_volumesnapshotclasses.yaml"
-        kubeconfig: "{{ kubeconfig }}"
+      shell: >
+        kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/{{ snapshot_version }}/client/config/crd/snapshot.storage.k8s.io_volumesnapshotclasses.yaml
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
 
     - name: Apply VolumeSnapshotContent CRD
-      kubernetes.core.k8s:
-        state: present
-        src: "https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/{{ snapshot_version }}/client/config/crd/snapshot.storage.k8s.io_volumesnapshotcontents.yaml"
-        kubeconfig: "{{ kubeconfig }}"
+      shell: >
+        kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/{{ snapshot_version }}/client/config/crd/snapshot.storage.k8s.io_volumesnapshotcontents.yaml
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
 
     - name: Apply VolumeSnapshot CRD
-      kubernetes.core.k8s:
-        state: present
-        src: "https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/{{ snapshot_version }}/client/config/crd/snapshot.storage.k8s.io_volumesnapshots.yaml"
-        kubeconfig: "{{ kubeconfig }}"
+      shell: >
+        kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/{{ snapshot_version }}/client/config/crd/snapshot.storage.k8s.io_volumesnapshots.yaml
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
 
     - name: Apply Snapshot Controller RBAC
-      kubernetes.core.k8s:
-        state: present
-        src: "https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/{{ snapshot_version }}/deploy/kubernetes/snapshot-controller/rbac-snapshot-controller.yaml"
-        kubeconfig: "{{ kubeconfig }}"
+      shell: >
+        kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/{{ snapshot_version }}/deploy/kubernetes/snapshot-controller/rbac-snapshot-controller.yaml
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
 
     - name: Apply Snapshot Controller Deployment
-      kubernetes.core.k8s:
-        state: present
-        src: "https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/{{ snapshot_version }}/deploy/kubernetes/snapshot-controller/setup-snapshot-controller.yaml"
-        kubeconfig: "{{ kubeconfig }}"
+      shell: >
+        kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/{{ snapshot_version }}/deploy/kubernetes/snapshot-controller/setup-snapshot-controller.yaml
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
