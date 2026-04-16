@@ -4,7 +4,7 @@
 
   vars:
     kubeconfig: /etc/rancher/k3s/k3s.yaml
-    longhorn_host: longhorn.caverna.local
+    longhorn_host: "longhorn-{{ inventory_hostname.split('.')[-1] }}.caverna.local"
 
   tasks:
 
@@ -34,3 +34,7 @@
         EOF
       environment:
         KUBECONFIG: "{{ kubeconfig }}"
+
+    - name: Show Longhorn URL
+      debug:
+        msg: "Longhorn URL: http://{{ longhorn_host }}"
