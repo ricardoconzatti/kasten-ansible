@@ -1,0 +1,20 @@
+- name: Deploy Homer App
+  hosts: all
+  become: yes
+
+  vars:
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+
+  tasks:
+
+    - name: Apply Homer persistent resources
+      kubernetes.core.k8s:
+        state: present
+        src: https://raw.githubusercontent.com/ricardoconzatti/demo/refs/heads/main/homer-demo/Kubernetes/homer-demo-persistent.yaml
+        kubeconfig: "{{ kubeconfig }}"
+
+    - name: Apply Homer ingress
+      kubernetes.core.k8s:
+        state: present
+        src: https://raw.githubusercontent.com/ricardoconzatti/demo/refs/heads/main/homer-demo/Kubernetes/homer-demo-ingress.yaml
+        kubeconfig: "{{ kubeconfig }}"
