@@ -29,7 +29,7 @@
         KUBECONFIG: "{{ kubeconfig }}"
 
 - name: Show URL
-  hosts: localhost
+  hosts: all
   gather_facts: false
 
   vars:
