@@ -4,6 +4,7 @@
 
   vars:
     kubeconfig_path: /etc/rancher/k3s/k3s.yaml
+    k3s_version: "v1.33.0+k3s1"
 
   tasks:
 
@@ -19,6 +20,8 @@
 
     - name: Install K3s
       shell: curl -sfL https://get.k3s.io | sh -
+      environment:
+        INSTALL_K3S_VERSION: "{{ k3s_version }}"
       args:
         creates: /usr/local/bin/k3s
 
@@ -57,3 +60,11 @@
         path: "/home/{{ ansible_user }}/.kube/config"
         regexp: 'https://127.0.0.1:6443'
         replace: "https://{{ inventory_hostname }}:6443"
+
+    - name: Get K3s version
+      command: k3s --version
+      register: k3s_version
+
+    - name: Show K3s version
+      debug:
+        msg: "{{ k3s_version.stdout_lines[0] }}"
