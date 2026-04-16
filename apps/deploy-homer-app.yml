@@ -39,4 +39,4 @@
 
     - name: Print URL
       debug:
-        msg: "http://{{ homerdemo_host }}"
+        msg: "Homer demo URL: http://{{ homerdemo_host }}"
