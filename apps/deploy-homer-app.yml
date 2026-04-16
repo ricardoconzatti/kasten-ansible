@@ -18,21 +18,37 @@
       environment:
         KUBECONFIG: "{{ kubeconfig }}"
 
-    - name: Change ingress hostname
-      hosts: localhost
-      gather_facts: false
-      tasks:
-        - name: Patch ingress host
-          kubernetes.core.k8s:
-            state: patched
-            kind: Ingress
-            namespace: homer-demo
-            name: homer-demo-ingress
-            definition:
-              spec:
-                rules:
-                  - host: "{{ homerdemo_host }}"
 
-    - name: Show Homer demo URL
+- name: Patch Ingress hostname
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    homerdemo_host: "homer-{{ inventory_hostname.split('.')[-1] }}.caverna.local"
+
+  tasks:
+
+    - name: Patch ingress host
+      kubernetes.core.k8s:
+        state: patched
+        kind: Ingress
+        namespace: homer-demo
+        name: homer-demo-ingress
+        definition:
+          spec:
+            rules:
+              - host: "{{ homerdemo_host }}"
+
+
+- name: Show URL
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    homerdemo_host: "homer-{{ inventory_hostname.split('.')[-1] }}.caverna.local"
+
+  tasks:
+
+    - name: Print URL
       debug:
         msg: "Homer demo URL: http://{{ homerdemo_host }}"
