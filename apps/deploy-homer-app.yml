@@ -9,12 +9,14 @@
   tasks:
 
     - name: Apply Homer persistent resources
-      shell: kubectl apply -f https://raw.githubusercontent.com/ricardoconzatti/demo/refs/heads/main/homer-demo/Kubernetes/homer-demo-persistent.yaml
+      shell: >
+        kubectl apply -f https://raw.githubusercontent.com/ricardoconzatti/demo/refs/heads/main/homer-demo/Kubernetes/homer-demo-persistent.yaml
       environment:
         KUBECONFIG: "{{ kubeconfig }}"
 
     - name: Apply Homer ingress
-      shell: kubectl apply -f https://raw.githubusercontent.com/ricardoconzatti/demo/refs/heads/main/homer-demo/Kubernetes/homer-demo-ingress.yaml
+      shell: >
+        kubectl apply -f https://raw.githubusercontent.com/ricardoconzatti/demo/refs/heads/main/homer-demo/Kubernetes/homer-demo-ingress.yaml
       environment:
         KUBECONFIG: "{{ kubeconfig }}"
 
@@ -24,21 +26,19 @@
 
   vars:
     homerdemo_host: "homer-{{ inventory_hostname.split('.')[-1] }}.caverna.local"
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
 
   tasks:
 
-    - name: Patch ingress host
-      kubernetes.core.k8s:
-        state: patched
-        kind: Ingress
-        namespace: homer-demo
-        name: homer-demo-ingress
-        definition:
-          spec:
-            rules:
-              - host: "{{ homerdemo_host }}"
+    - name: Patch ingress host with kubectl
+      shell: >
+        kubectl patch ingress homer-demo-ingress -n homer-demo
+        --type merge
+        -p '{"spec":{"rules":[{"host":"{{ homerdemo_host }}","http":{"paths":[{"path":"/","pathType":"Prefix","backend":{"service":{"name":"homer-web","port":{"number":80}}}}]}}]}}'
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
 
-- name: Show URL
+- name: Show Homer URL
   hosts: localhost
   gather_facts: false
 
