@@ -8,13 +8,11 @@
   tasks:
 
     - name: Apply Homer persistent resources
-      kubernetes.core.k8s:
-        state: present
-        src: https://raw.githubusercontent.com/ricardoconzatti/demo/refs/heads/main/homer-demo/Kubernetes/homer-demo-persistent.yaml
-        kubeconfig: "{{ kubeconfig }}"
+      shell: kubectl apply -f https://raw.githubusercontent.com/ricardoconzatti/demo/refs/heads/main/homer-demo/Kubernetes/homer-demo-persistent.yaml
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
 
     - name: Apply Homer ingress
-      kubernetes.core.k8s:
-        state: present
-        src: https://raw.githubusercontent.com/ricardoconzatti/demo/refs/heads/main/homer-demo/Kubernetes/homer-demo-ingress.yaml
-        kubeconfig: "{{ kubeconfig }}"
+      shell: kubectl apply -f https://raw.githubusercontent.com/ricardoconzatti/demo/refs/heads/main/homer-demo/Kubernetes/homer-demo-ingress.yaml
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
