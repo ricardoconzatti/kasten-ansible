@@ -1,4 +1,4 @@
-- name: Install Veeam Kasten
+- name: Install Veeam Kasten instance
   hosts: all
   become: yes
 
