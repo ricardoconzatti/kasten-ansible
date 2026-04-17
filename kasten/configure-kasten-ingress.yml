@@ -37,4 +37,4 @@
 
     - name: Show Kasten URL
       debug:
-        msg: "Kasten URL: http://{{ kasten_host }}"
+        msg: "Kasten URL: http://{{ kasten_host }}/k10/#"
