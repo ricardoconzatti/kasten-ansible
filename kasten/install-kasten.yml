@@ -30,7 +30,27 @@
       environment:
         KUBECONFIG: "{{ kubeconfig }}"
 
-    - name: Wait for Kasten pods to be ready
-      shell: kubectl rollout status deployment -n kasten-io --timeout=600s --all
+    - name: Get Kasten deployments
+      shell: kubectl get deploy -n kasten-io -o name
+      register: deployments
       environment:
         KUBECONFIG: "{{ kubeconfig }}"
+
+    - name: Wait for each Kasten deployment
+      shell: kubectl rollout status {{ item }} -n kasten-io --timeout=600s
+      loop: "{{ deployments.stdout_lines }}"
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
+
+    - name: Get Kasten version
+      shell: helm list -n kasten-io -o json
+      register: helm_output
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
+
+    - name: Show Kasten version
+      debug:
+        msg: >
+          Kasten version installed: {{
+            (helm_output.stdout | from_json)[0].app_version
+          }}
