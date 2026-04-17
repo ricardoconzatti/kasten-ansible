@@ -1,0 +1,34 @@
+- name: Install Kasten K10
+  hosts: all
+  become: yes
+
+  vars:
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+
+  tasks:
+
+    - name: Add Kasten Helm repo
+      shell: helm repo add kasten https://charts.kasten.io/
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
+
+    - name: Update Helm repos
+      shell: helm repo update
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
+
+    - name: Install Kasten K10
+      shell: |
+        helm upgrade --install k10 kasten/k10 \
+          --namespace kasten-io \
+          --create-namespace \
+          --set prometheus.server.persistentVolume.size=4Gi \
+          --set global.persistence.size=8Gi \
+          --set limiter.executorReplicas=1
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
+
+    - name: Wait for Kasten pods to be ready
+      shell: kubectl wait --for=condition=ready pod --all -n kasten-io --timeout=300s
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
