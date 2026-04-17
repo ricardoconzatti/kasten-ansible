@@ -1,3 +1,3 @@
-- import_playbook: install-kasten.yml
+- import_playbook: install-kasten-instance.yml
 - import_playbook: configure-kasten-serviceaccount-token.yml
 - import_playbook: configure-kasten-ingress.yml
