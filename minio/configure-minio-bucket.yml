@@ -115,7 +115,7 @@
       debug:
         msg:
           - "Bucket: {{ bucket_name }}"
-          - "User: {{ user_name }}"
+          - "Endpoint: {{ minio_url }}"
           - "Region: {{ region }}"
           - "Access key: {{ user_name }}"
           - "Secret key: {{ user_password }}"
