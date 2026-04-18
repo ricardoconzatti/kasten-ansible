@@ -12,8 +12,7 @@
     minio_access_key: "{{ lookup('env', 'minio_access_key') }}"
     minio_secret_key: "{{ lookup('env', 'minio_secret_key') }}"
 
-    name: "semaphore-lab-kasten-{{ inventory_hostname.split('.')[-1] }}"
-    bucket_name: "{{ name }}"
+    bucket_name: "semaphore-lab-kasten-{{ lookup('password', '/dev/null length=3 chars=digits') }}"
     region: "sp-conza-1"
 
     user_name: "veeam.kasten"
