@@ -65,7 +65,6 @@
       failed_when: false
       changed_when: "'Added user' in user_result.stdout"
 
-    # ✅ NOVO: policy inline
     - name: Create policy file inline
       copy:
         dest: "{{ policy_file }}"
@@ -118,5 +117,5 @@
           - "Bucket: {{ bucket_name }}"
           - "User: {{ user_name }}"
           - "Region: {{ region }}"
-          - "Retention: {{ retention_info.stdout }}"
-          - "Versioning: {{ version_info.stdout }}"
+          - "Access key: {{ user_name }}"
+          - "Secret key: {{ user_password }}"
