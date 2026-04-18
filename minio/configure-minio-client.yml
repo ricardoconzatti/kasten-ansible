@@ -3,7 +3,7 @@
   gather_facts: no
 
   vars:
-    mc_path: /usr/local/bin/mc
+    mc_path: /tmp/mc
     mc_url: https://dl.min.io/client/mc/release/linux-amd64/mc
 
   tasks:
