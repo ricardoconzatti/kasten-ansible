@@ -1,1 +1,34 @@
+- name: Deploy World App
+  hosts: all
+  become: yes
 
+  vars:
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+    domain: "caverna.local"
+    world_host: "world-{{ inventory_hostname.split('.')[-1] }}.{{ domain }}"
+
+  tasks:
+
+    - name: Apply World persistent resources
+      shell: >
+        kubectl apply -f https://raw.githubusercontent.com/ricardoconzatti/demo/refs/heads/main/world-dev/Kubernetes/world-dev-persistent.yaml
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
+
+    - name: Apply World ingress
+      shell: >
+        kubectl apply -f https://raw.githubusercontent.com/ricardoconzatti/demo/refs/heads/main/world-dev/Kubernetes/world-dev-ingress.yaml
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
+
+    - name: Patch ingress hostname
+      shell: >
+        kubectl patch ingress world-dev-ingress -n world-dev
+        --type merge
+        -p '{"spec":{"rules":[{"host":"{{ world_host }}","http":{"paths":[{"path":"/","pathType":"Prefix","backend":{"service":{"name":"world-app","port":{"number":80}}}}]}}]}}'
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
+
+    - name: Show world URL
+      debug:
+        msg: "World demo app URL: http://{{ world_host }}"
