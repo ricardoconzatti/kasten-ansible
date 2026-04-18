@@ -1,0 +1,60 @@
+- name: Install K3s
+  hosts: all
+  become: yes
+
+  vars:
+    kubeconfig_path: /etc/rancher/k3s/k3s.yaml
+    k3s_version: "v1.33.0+k3s1"
+
+  tasks:
+
+    - name: Install K3s
+      shell: curl -sfL https://get.k3s.io | sh -
+      environment:
+        INSTALL_K3S_VERSION: "{{ k3s_version }}"
+      args:
+        creates: /usr/local/bin/k3s
+
+    - name: Wait for K3s to be ready
+      shell: k3s kubectl get nodes
+      register: result
+      retries: 15
+      delay: 10
+      until: result.rc == 0
+
+    - name: Create kubectl symlink (k3s -> kubectl)
+      file:
+        src: /usr/local/bin/k3s
+        dest: /usr/local/bin/kubectl
+        state: link
+
+    - name: Ensure .kube directory exists
+      file:
+        path: "/home/{{ ansible_user }}/.kube"
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0755'
+
+    - name: Copy kubeconfig
+      copy:
+        src: "{{ kubeconfig_path }}"
+        dest: "/home/{{ ansible_user }}/.kube/config"
+        remote_src: yes
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0600'
+
+    - name: Fix kubeconfig server address
+      replace:
+        path: "/home/{{ ansible_user }}/.kube/config"
+        regexp: 'https://127.0.0.1:6443'
+        replace: "https://{{ inventory_hostname }}:6443"
+
+    - name: Get K3s version
+      command: k3s --version
+      register: k3s_version
+
+    - name: Show K3s version
+      debug:
+        msg: "{{ k3s_version.stdout_lines[0] }}"

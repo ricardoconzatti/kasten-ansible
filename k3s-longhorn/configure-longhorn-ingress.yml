@@ -1,0 +1,41 @@
+- name: Expose Longhorn via Ingress
+  hosts: all
+  become: yes
+
+  vars:
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+    domain: "caverna.local"
+    longhorn_host: "longhorn-{{ inventory_hostname.split('.')[-1] }}.{{ domain }}"
+
+  tasks:
+
+    - name: Create Longhorn Ingress
+      shell: |
+        cat <<EOF | kubectl apply -f -
+        apiVersion: networking.k8s.io/v1
+        kind: Ingress
+        metadata:
+          name: longhorn-ingress
+          namespace: longhorn-system
+          annotations:
+            traefik.ingress.kubernetes.io/router.entrypoints: web
+        spec:
+          ingressClassName: traefik
+          rules:
+          - host: {{ longhorn_host }}
+            http:
+              paths:
+              - path: /
+                pathType: Prefix
+                backend:
+                  service:
+                    name: longhorn-frontend
+                    port:
+                      number: 80
+        EOF
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
+
+    - name: Show Longhorn URL
+      debug:
+        msg: "Longhorn URL: http://{{ longhorn_host }}"

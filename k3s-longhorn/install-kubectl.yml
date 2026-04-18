@@ -1,0 +1,35 @@
+- name: Prepare node (disable swap, install kubectl)
+  hosts: all
+  become: yes
+
+  tasks:
+
+    - name: Disable swap immediately
+      command: swapoff -a
+      when: ansible_swaptotal_mb > 0
+
+    - name: Disable swap permanently in fstab
+      replace:
+        path: /etc/fstab
+        regexp: '^([^#].*\sswap\s.*)$'
+        replace: '# \1'
+
+    - name: Install snapd
+      apt:
+        name: snapd
+        state: present
+
+    - name: Install kubectl via snap
+      community.general.snap:
+        name: kubectl
+        classic: yes
+
+    - name: Install nfs-common
+      apt:
+        name: nfs-common
+        state: present
+        update_cache: yes
+      register: apt_result
+      retries: 10
+      delay: 10
+      until: apt_result is succeeded
