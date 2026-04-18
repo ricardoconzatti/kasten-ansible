@@ -1,0 +1,16 @@
+# kubernetes (k3s / longhorn)
+- import_playbook: ../k3s-longhorn-single-node/install-kubectl.yml
+- import_playbook: ../k3s-longhorn-single-node/install-k3s.yml
+- import_playbook: ../k3s-longhorn-single-node/install-helm3.yml
+- import_playbook: ../k3s-longhorn-single-node/install-longhorn.yml
+- import_playbook: ../k3s-longhorn-single-node/install-csi-snapshot.yml
+- import_playbook: ../k3s-longhorn-single-node/configure-storage.yml
+- import_playbook: ../k3s-longhorn-single-node/configure-longhorn-ingress.yml
+
+# veeam kasten
+- import_playbook: ../kasten/install-kasten-instance.yml
+- import_playbook: ../kasten/configure-kasten-serviceaccount-token.yml
+- import_playbook: ../kasten/configure-kasten-ingress.yml
+
+# demo app
+- import_playbook: ../apps/deploy-homer-app.yml
