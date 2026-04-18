@@ -25,7 +25,7 @@
       shell: >
         kubectl patch ingress world-dev-ingress -n world-dev
         --type merge
-        -p '{"spec":{"rules":[{"host":"{{ world_host }}","http":{"paths":[{"path":"/","pathType":"Prefix","backend":{"service":{"name":"world-app","port":{"number":80}}}}]}}]}}'
+        -p '{"spec":{"rules":[{"host":"{{ world_host }}","http":{"paths":[{"path":"/","pathType":"Prefix","backend":{"service":{"name":"world-app","port":{"number":3022}}}}]}}]}}'
       environment:
         KUBECONFIG: "{{ kubeconfig }}"
 
