@@ -66,10 +66,21 @@
       failed_when: false
       changed_when: "'Added user' in user_result.stdout"
 
-    - name: Copy policy file
+    # ✅ NOVO: policy inline
+    - name: Create policy file inline
       copy:
-        src: veeam-kasten-policy.json
         dest: "{{ policy_file }}"
+        content: |
+          {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Action": ["s3:*"],
+                "Resource": ["arn:aws:s3:::*"]
+              }
+            ]
+          }
 
     - name: Create policy
       shell: >
