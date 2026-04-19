@@ -1,0 +1,27 @@
+- name: Ensure artifact file path
+  set_fact:
+    artifact_file: "{{ artifact_file | default('/tmp/artifact.json') }}"
+
+- name: Read existing artifact
+  slurp:
+    src: "{{ artifact_file }}"
+  register: artifact_raw
+  ignore_errors: yes
+
+- name: Parse artifact
+  set_fact:
+    artifact: >-
+      {{
+        (artifact_raw.content | b64decode | from_json)
+        if (artifact_raw is defined and artifact_raw.content is defined)
+        else {}
+      }}
+
+- name: Merge new section into artifact
+  set_fact:
+    artifact: "{{ artifact | combine(artifact_section, recursive=True) }}"
+
+- name: Save artifact
+  copy:
+    dest: "{{ artifact_file }}"
+    content: "{{ artifact | to_nice_json }}"
