@@ -50,6 +50,6 @@
         name: artifact
       vars:
         artifact_section:
-          longhorn:
+          kasten:
             url: "https://{{ kasten_host }}/k10/#"
 
