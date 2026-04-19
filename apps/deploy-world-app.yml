@@ -32,3 +32,11 @@
     - name: Show world URL
       debug:
         msg: "World demo app URL: https://{{ world_host }}"
+
+    - name: Add demo app (world) to artifact
+      include_role:
+        name: artifact
+      vars:
+        artifact_section:
+          demo-app:
+            world-url: "https://{{ world_host }}"
