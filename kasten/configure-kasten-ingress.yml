@@ -7,6 +7,7 @@
     domain: "caverna.local"
     kasten_host: "kasten-{{ inventory_hostname.split('.')[-1] }}.{{ domain }}"
     tls_secret: "kasten-{{ inventory_hostname.split('.')[-1] }}-tls"
+    use_artifact: false
 
   tasks:
 
