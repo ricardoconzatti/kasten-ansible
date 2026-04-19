@@ -1,4 +1,7 @@
 - hosts: all
+  vars:
+    use_artifact: true
+    artifact_file: /tmp/artifact-lab.json
   tasks:
     - debug:
         msg: "Starting full lab deploy"
