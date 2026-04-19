@@ -39,3 +39,12 @@
     - name: Show Longhorn URL
       debug:
         msg: "Longhorn URL: http://{{ longhorn_host }}"
+
+    - name: Add Longhorn to artifact
+      include_role:
+        name: artifact
+      vars:
+        artifact_section:
+          longhorn:
+            url: "http://{{ longhorn_host }}"
+        namespace: "longhorn-system"
