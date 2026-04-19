@@ -3,6 +3,7 @@
   gather_facts: no
 
   vars:
+    use_artifact: false
     mc_path: "/tmp/mc"
     mc: "{{ mc_path }}"
     mc_download_url: "https://dl.min.io/client/mc/release/linux-amd64/mc"
