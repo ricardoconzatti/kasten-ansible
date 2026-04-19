@@ -47,4 +47,3 @@
         artifact_section:
           longhorn:
             url: "http://{{ longhorn_host }}"
-        namespace: "longhorn-system"
