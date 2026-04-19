@@ -1,14 +1,19 @@
 - name: Send artifact to n8n
   hosts: all
+
+  vars:
+    url_webhook: "https://webhook-automation.conza.xyz/webhook/kasten-lab"
+    file: "/tmp/artifact.json"
+  
   tasks:
     - name: Read artifact
       slurp:
-        src: /tmp/artifact.json
+        src: {{ file }}
       register: artifact_raw
 
     - name: Send to n8n webhook
       uri:
-        url: "https://webhook-automation.conza.xyz/webhook/kasten-lab"
+        url: {{ url_webhook }}
         method: POST
         body_format: json
         body: "{{ artifact_raw.content | b64decode | from_json }}"
