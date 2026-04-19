@@ -6,6 +6,7 @@
     kubeconfig: /etc/rancher/k3s/k3s.yaml
     domain: "caverna.local"
     world_host: "world-{{ inventory_hostname.split('.')[-1] }}.{{ domain }}"
+    use_artifact: false
 
   tasks:
 
