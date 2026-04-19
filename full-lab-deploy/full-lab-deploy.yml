@@ -1,23 +1,13 @@
-- include_role:
-    name: artifact
-  vars:
-    artifact_section:
-      test:
-        ok: true
-        
+- hosts: all
+  tasks:
+    - debug:
+        msg: "Starting full lab deploy"
+
 # kubernetes (k3s / longhorn)
-- import_playbook: ../k3s-longhorn/install-kubectl.yml
-- import_playbook: ../k3s-longhorn/install-k3s.yml
-- import_playbook: ../k3s-longhorn/install-helm3.yml
-- import_playbook: ../k3s-longhorn/install-longhorn.yml
-- import_playbook: ../k3s-longhorn/configure-csi-snapshot.yml
-- import_playbook: ../k3s-longhorn/configure-storage.yml
-- import_playbook: ../k3s-longhorn/configure-longhorn-ingress.yml
+- import_playbook: ../k3s-longhorn/deploy-k3s-longhorn-single-node.yml
 
 # veeam kasten
-- import_playbook: ../kasten/install-kasten-instance.yml
-- import_playbook: ../kasten/configure-kasten-serviceaccount-token.yml
-- import_playbook: ../kasten/configure-kasten-ingress.yml
+- import_playbook: ../kasten/deploy-kasten.yml
 
 # minio (repo)
 - import_playbook: ../minio/configure-minio-bucket.yml
