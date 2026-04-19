@@ -11,6 +11,7 @@
     minio_url: "https://minio.caverna.local:9000"
     minio_access_key: "{{ lookup('env', 'minio_access_key') }}"
     minio_secret_key: "{{ lookup('env', 'minio_secret_key') }}"
+    retention: "7d"
     
     bucket_name: "veeam-kasten-lab-{{ random_suffix }}"
     region: "sp-conza-1"
@@ -98,9 +99,9 @@
       register: attach_result
       failed_when: false
 
-    - name: Set retention (COMPLIANCE 1d)
+    - name: Set retention (COMPLIANCE)
       shell: >
-        {{ mc }} retention set --default COMPLIANCE 1d
+        {{ mc }} retention set --default COMPLIANCE {{ retention }}
         {{ minio_alias }}/{{ bucket_name }} --insecure
       register: retention_result
       failed_when: false
@@ -113,3 +114,16 @@
           - "Region: {{ region }}"
           - "Access key: {{ user_name }}"
           - "Secret key: {{ user_password }}"
+
+    - name: Add MinIO to artifact
+      include_role:
+        name: artifact
+      vars:
+        artifact_section:
+          minio:
+            endpoint: "{{ minio_url }}"
+            region: "{{ region }}"
+            bucket: "{{ bucket_name }}"
+            retention: "{{ retention }}"
+            accessKey: "{{ user_name }}"
+            secretKey: "{{ user_password }}"
