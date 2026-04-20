@@ -123,6 +123,7 @@
         artifact_section:
           minio:
             endpoint: "{{ minio_url }}"
+            certificate: "skip"
             region: "{{ region }}"
             bucket: "{{ bucket_name }}"
             retention: "{{ retention }}"
