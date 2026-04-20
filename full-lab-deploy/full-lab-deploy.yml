@@ -45,16 +45,32 @@
         lab_duration_seconds: "{{ (lab_end_time | int) - (lab_start_time | int) }}"
       run_once: true
 
-    - name: Format duration
+    - name: Calculate duration parts
       set_fact:
         duration_min: "{{ (lab_duration_seconds | int) // 60 }}"
         duration_sec: "{{ (lab_duration_seconds | int) % 60 }}"
+      run_once: true
+
+    - name: Format duration (PT-BR)
+      set_fact:
         lab_duration_pretty: >-
           {{
             duration_min ~ ' minuto' ~
             ( 's' if duration_min != 1 else '' )
             ~ ' e ' ~
             duration_sec ~ ' segundo' ~
+            ( 's' if duration_sec != 1 else '' )
+          }}
+      run_once: true
+
+    - name: Format duration (EN)
+      set_fact:
+        lab_duration_pretty_en: >-
+          {{
+            duration_min ~ ' minute' ~
+            ( 's' if duration_min != 1 else '' )
+            ~ ' and ' ~
+            duration_sec ~ ' second' ~
             ( 's' if duration_sec != 1 else '' )
           }}
       run_once: true
@@ -72,6 +88,7 @@
           lab:
             duration_seconds: "{{ lab_duration_seconds }}"
             duration_pretty: "{{ lab_duration_pretty }}"
+            duration_pretty_en: "{{ lab_duration_pretty_en }}"
       when: use_artifact | default(false)
       run_once: true
 
