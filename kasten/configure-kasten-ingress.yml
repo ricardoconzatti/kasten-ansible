@@ -4,7 +4,7 @@
 
   vars:
     kubeconfig: /etc/rancher/k3s/k3s.yaml
-    domain: "caverna.local"
+    domain: "{{ lookup('env', 'domain') }}"
     kasten_host: "kasten-{{ inventory_hostname.split('.')[-1] }}.{{ domain }}"
     tls_secret: "kasten-{{ inventory_hostname.split('.')[-1] }}-tls"
     use_artifact: "{{ use_artifact | default(false) }}"
