@@ -47,4 +47,4 @@
       vars:
         artifact_section:
           longhorn:
-            url: "http://{{ longhorn_host }}"
+            url: "https://{{ longhorn_host }}"
