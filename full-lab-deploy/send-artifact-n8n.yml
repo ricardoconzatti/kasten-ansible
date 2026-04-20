@@ -17,6 +17,8 @@
         url: "{{ url_webhook }}"
         method: POST
         body_format: json
-        body: "{{ artifact_raw.content | b64decode | from_json }}"
+        body:
+          recipient_email: "{{ recipient_email }}"
+          data: "{{ artifact_raw.content | b64decode | from_json }}"
         headers:
           Content-Type: "application/json"
