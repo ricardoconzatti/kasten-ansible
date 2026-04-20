@@ -1,9 +1,20 @@
 - hosts: all
+  gather_facts: no
   vars:
     use_artifact: true
+
   tasks:
-    - debug:
-        msg: "##### Starting full lab deploy"
+    - name: Register start time
+      set_fact:
+        lab_start_time: "{{ lookup('pipe', 'date +%s') | int }}"
+      run_once: true
+
+    - name: Starting message
+      debug:
+        msg: "##### Starting full Kasten lab deploy"
+      run_once: true
+
+# IMPORT PLAYBOOKS
 
 # kubernetes (k3s / longhorn)
 - import_playbook: ../k3s-longhorn/deploy-k3s-longhorn-single-node.yml
@@ -18,5 +29,49 @@
 - import_playbook: ../apps/deploy-homer-app.yml
 - import_playbook: ../apps/deploy-world-app.yml
 
-# send artifact to n8n
+# CALCULATE TIME + ARTIFACT
+
+- hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: Register end time
+      set_fact:
+        lab_end_time: "{{ lookup('pipe', 'date +%s') | int }}"
+      run_once: true
+
+    - name: Calculate total duration
+      set_fact:
+        lab_duration_seconds: "{{ lab_end_time | int - lab_start_time | int }}"
+      run_once: true
+
+    - name: Format duration
+      set_fact:
+        lab_duration_pretty: >-
+          {{
+            (lab_duration_seconds // 60) ~ ' minuto' ~
+            ( 's' if (lab_duration_seconds // 60) != 1 else '' )
+            ~ ' e ' ~
+            (lab_duration_seconds % 60) ~ ' segundo' ~
+            ( 's' if (lab_duration_seconds % 60) != 1 else '' )
+          }}
+      run_once: true
+
+    - name: Show duration
+      debug:
+        msg: "Total lab deploy time: {{ lab_duration_pretty }}"
+      run_once: true
+
+    - name: Add duration to artifact
+      include_role:
+        name: artifact
+      vars:
+        artifact_section:
+          lab:
+            duration_seconds: "{{ lab_duration_seconds }}"
+            duration_pretty: "{{ lab_duration_pretty }}"
+      when: use_artifact | default(false)
+      run_once: true
+
+# SEND TO N8N
 - import_playbook: send-artifact-n8n.yml
