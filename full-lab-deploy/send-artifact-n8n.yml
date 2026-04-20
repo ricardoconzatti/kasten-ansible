@@ -1,6 +1,6 @@
 - name: Send artifact to n8n
-  hosts: localhost
-  gather_facts: no
+  hosts: all
+  run_once: true
 
   vars:
     url_webhook: "https://webhook-automation.conza.xyz/webhook/kasten-lab"
