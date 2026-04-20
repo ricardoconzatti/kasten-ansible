@@ -58,3 +58,11 @@
     - name: Show K3s version
       debug:
         msg: "{{ k3s_version.stdout_lines[0] }}"
+
+    - name: Add K3s to artifact
+      include_role:
+        name: artifact
+      vars:
+        artifact_section:
+          k3s:
+            version: "http://{{ k3s_version.stdout_lines[0] }}"
