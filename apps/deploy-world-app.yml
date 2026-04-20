@@ -43,3 +43,4 @@
             world:
             url: "https://{{ world_host }}"
             credential: "demo/demo"
+      when: use_artifact
