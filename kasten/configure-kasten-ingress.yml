@@ -1,4 +1,4 @@
-- name: Configure Kasten Ingress (HTTPS)
+- name: Configure Kasten Ingress
   hosts: all
   become: yes
 
@@ -6,12 +6,11 @@
     kubeconfig: /etc/rancher/k3s/k3s.yaml
     domain: "{{ lookup('env', 'domain') }}"
     kasten_host: "kasten-{{ inventory_hostname.split('.')[-1] }}.{{ domain }}"
-    tls_secret: "kasten-{{ inventory_hostname.split('.')[-1] }}-tls"
     use_artifact: "{{ use_artifact | default(false) }}"
 
   tasks:
 
-    - name: Create Kasten Ingress (HTTPS)
+    - name: Create Kasten Ingress
       shell: |
         cat <<EOF | kubectl apply -f -
         apiVersion: networking.k8s.io/v1
@@ -20,13 +19,9 @@
           name: kasten-traefik-ingress
           namespace: kasten-io
           annotations:
-            traefik.ingress.kubernetes.io/router.entrypoints: websecure
+            traefik.ingress.kubernetes.io/router.entrypoints: web
         spec:
           ingressClassName: traefik
-          tls:
-          - hosts:
-            - {{ kasten_host }}
-            secretName: {{ tls_secret }}
           rules:
           - host: {{ kasten_host }}
             http:
@@ -53,4 +48,3 @@
         artifact_section:
           kasten:
             url: "https://{{ kasten_host }}/k10/#"
-
