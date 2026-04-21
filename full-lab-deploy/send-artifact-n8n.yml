@@ -15,7 +15,7 @@
         src: "{{ file }}"
       register: artifact_raw
 
-    - name: Download PDF from MinIO
+    - name: Download PDF from MinIO (ignore self-signed cert)
       get_url:
         url: "{{ pdf_url }}"
         dest: "{{ pdf_file }}"
