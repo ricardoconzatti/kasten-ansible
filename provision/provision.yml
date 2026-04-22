@@ -4,7 +4,7 @@
   tasks:
     - name: Add dynamic host
       add_host:
-        name: target
+        name: "kasten-lab"
         ansible_host: "{{ ip }}"
         ansible_user: "Ubuntu admin"
         groups: dynamic_targets
