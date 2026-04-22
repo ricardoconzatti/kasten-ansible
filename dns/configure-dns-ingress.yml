@@ -33,12 +33,10 @@
     - name: Add ingress rules
       blockinfile:
         path: "{{ config_path }}"
-        marker: "# {mark} ANSIBLE {{ item.name }}"
         insertbefore: ".*http_status:404"
         block: |
-            - hostname: {{ item.name }}-{{ labid }}.{{ domain }}
-              service: {{ item.protocol }}://{{ service_ip }}{% if item.port is defined and item.name == 'kstatus' %}:{{ item.port }}{% endif %}
-        unsafe_writes: true
+          - hostname: {{ item.name }}-{{ labid }}.{{ domain }}
+            service: {{ item.protocol }}://{{ service_ip }}:{{ item.port }}
       loop: "{{ apps }}"
 
     - name: Restart dns container
