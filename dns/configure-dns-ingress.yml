@@ -30,5 +30,5 @@
         unsafe_writes: true
       loop: "{{ apps }}"
 
-    - name: Restart cloudflared container
-      shell: docker restart cloudflared-kasten-lab
+    - name: Restart dns container
+      shell: docker restart f3de065dadf4
