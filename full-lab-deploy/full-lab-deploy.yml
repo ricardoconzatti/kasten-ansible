@@ -74,6 +74,7 @@
       vars:
         artifact_section:
           lab:
+            id: "{{ labid }}"
             duration_seconds: "{{ lab_duration_seconds }}"
             duration_pretty: "{{ lab_duration_pretty }}"
       when: use_artifact | default(false)
