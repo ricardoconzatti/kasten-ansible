@@ -3,7 +3,6 @@
   become: yes
 
   vars:
-    domain: "{{ domain }}"
     kasten_host: "kasten-{{ labid }}.{{ domain }}"
     use_artifact: "{{ use_artifact | default(false) }}"
 
