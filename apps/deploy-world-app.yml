@@ -5,7 +5,7 @@
   vars:
     kubeconfig: /etc/rancher/k3s/k3s.yaml
     domain: "{{ domain }}"
-    world_host: "world-{{ inventory_hostname.split('.')[-1] }}.{{ domain }}"
+    world_host: "world-{{ labid }}.{{ domain }}"
     use_artifact: "{{ use_artifact | default(false) }}"
 
   tasks:
