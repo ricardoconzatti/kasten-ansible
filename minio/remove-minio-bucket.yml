@@ -1,0 +1,50 @@
+- name: Remove MinIO Bucket (for Kasten)
+  hosts: all
+  gather_facts: no
+
+  vars:
+    mc_path: "/tmp/mc"
+    mc: "{{ mc_path }}"
+    mc_download_url: "https://dl.min.io/client/mc/release/linux-amd64/mc"
+
+    minio_alias: "minio"
+    minio_access_key: "{{ minio_access_key }}"
+    minio_secret_key: "{{ minio_secret_key }}"
+
+    bucket_name: "kasten-lab-{{ labid }}"
+
+  tasks:
+
+    - name: Download MinIO Client
+      get_url:
+        url: "{{ mc_download_url }}"
+        dest: "{{ mc_path }}"
+        mode: '0755'
+
+    - name: Set MinIO alias
+      shell: >
+        {{ mc }} alias set {{ minio_alias }} {{ minio_url }}
+        {{ minio_access_key }} {{ minio_secret_key }} --insecure
+      register: alias_result
+      changed_when: false
+
+    - name: Remove all objects (recursive + versions)
+      shell: >
+        {{ mc }} rm {{ minio_alias }}/{{ bucket_name }}
+        --recursive --force --versions --insecure
+      register: rm_objects
+      failed_when: false
+
+    - name: Remove bucket
+      shell: >
+        {{ mc }} rb {{ minio_alias }}/{{ bucket_name }}
+        --force --insecure
+      register: rb_result
+      failed_when: false
+
+    - name: Debug removal
+      debug:
+        msg:
+          - "Bucket removal attempted: {{ bucket_name }}"
+          - "rm output: {{ rm_objects.stdout | default('') }}"
+          - "rb output: {{ rb_result.stdout | default('') }}"
