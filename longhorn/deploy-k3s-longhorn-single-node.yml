@@ -1,0 +1,7 @@
+- import_playbook: install-kubectl.yml
+- import_playbook: install-k3s.yml
+- import_playbook: install-helm3.yml
+- import_playbook: install-longhorn.yml
+- import_playbook: configure-csi-snapshot.yml
+- import_playbook: configure-storage.yml
+- import_playbook: configure-longhorn-ingress.yml

@@ -1,0 +1,47 @@
+- name: Expose Longhorn via Ingress
+  hosts: all
+  become: yes
+
+  vars:
+    domain: "{{ domain }}"
+    longhorn_host: "longhorn-{{ inventory_hostname.split('.')[-1] }}.{{ domain }}"
+    use_artifact: "{{ use_artifact | default(false) }}"
+
+  tasks:
+
+    - name: Create Longhorn Ingress
+      shell: |
+        cat <<EOF | kubectl apply -f -
+        apiVersion: networking.k8s.io/v1
+        kind: Ingress
+        metadata:
+          name: longhorn-ingress
+          namespace: longhorn-system
+          annotations:
+            traefik.ingress.kubernetes.io/router.entrypoints: web
+        spec:
+          ingressClassName: traefik
+          rules:
+          - host: {{ longhorn_host }}
+            http:
+              paths:
+              - path: /
+                pathType: Prefix
+                backend:
+                  service:
+                    name: longhorn-frontend
+                    port:
+                      number: 80
+        EOF
+
+    - name: Show Longhorn URL
+      debug:
+        msg: "Longhorn URL: http://{{ longhorn_host }}"
+
+    - name: Add Longhorn to artifact
+      include_role:
+        name: artifact
+      vars:
+        artifact_section:
+          longhorn:
+            url: "https://{{ longhorn_host }}"

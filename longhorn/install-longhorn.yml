@@ -1,0 +1,33 @@
+- name: Install Longhorn
+  hosts: all
+  become: yes
+
+  vars:
+    #kubeconfig: "/etc/rancher/k3s/k3s.yaml"
+    #longhornVersion: "1.9.0"
+
+  tasks:
+
+    - name: Add Longhorn repo
+      shell: helm repo add longhorn https://charts.longhorn.io
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
+
+    - name: Update Helm repos
+      shell: helm repo update
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
+
+    - name: Install Longhorn
+      shell: >
+        helm upgrade --install longhorn longhorn/longhorn
+        --namespace longhorn-system
+        --create-namespace
+        --version "{{ longhorn_version }}"
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
+
+    - name: Wait for Longhorn pods to be ready
+      shell: kubectl wait --for=condition=ready pod --all -n longhorn-system --timeout=600s
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"

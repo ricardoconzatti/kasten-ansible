@@ -1,0 +1,28 @@
+- name: Install CSI Snapshot CRDs and Controller
+  hosts: all
+  become: yes
+
+  vars:
+    snapshot_version: v6.2.1
+
+  tasks:
+
+    - name: Apply VolumeSnapshotClass CRD
+      shell: >
+        kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/{{ snapshot_version }}/client/config/crd/snapshot.storage.k8s.io_volumesnapshotclasses.yaml
+
+    - name: Apply VolumeSnapshotContent CRD
+      shell: >
+        kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/{{ snapshot_version }}/client/config/crd/snapshot.storage.k8s.io_volumesnapshotcontents.yaml
+
+    - name: Apply VolumeSnapshot CRD
+      shell: >
+        kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/{{ snapshot_version }}/client/config/crd/snapshot.storage.k8s.io_volumesnapshots.yaml
+
+    - name: Apply Snapshot Controller RBAC
+      shell: >
+        kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/{{ snapshot_version }}/deploy/kubernetes/snapshot-controller/rbac-snapshot-controller.yaml
+
+    - name: Apply Snapshot Controller Deployment
+      shell: >
+        kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/{{ snapshot_version }}/deploy/kubernetes/snapshot-controller/setup-snapshot-controller.yaml
