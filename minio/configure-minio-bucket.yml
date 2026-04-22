@@ -11,13 +11,13 @@
     minio_alias: "minio"
     minio_access_key: "{{ minio_access_key }}"
     minio_secret_key: "{{ minio_secret_key }}"
-    retention: "7d"
+    retention: "1d"
     
     bucket_name: "kasten-lab-{{ labid }}"
     region: "sp-conza-1"
 
     user_name: "kasten.lab.{{ labid }}"
-    user_password: "vee@m123"
+    user_password: "K@sten{{ labid }}"
 
     policy_name: "kasten-lab-policy"
     policy_file: "/tmp/kasten-lab-policy.json"
