@@ -20,8 +20,6 @@
         volumeBindingMode: WaitForFirstConsumer
         allowVolumeExpansion: true
         EOF
-      environment:
-        KUBECONFIG: "{{ kubeconfig }}"
 
     - name: Create VolumeSnapshotClass
       shell: |
@@ -37,17 +35,11 @@
         parameters:
           type: snap
         EOF
-      environment:
-        KUBECONFIG: "{{ kubeconfig }}"
 
     - name: Remove default from local-path
       shell: kubectl patch storageclass local-path -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
-      environment:
-        KUBECONFIG: "{{ kubeconfig }}"
       ignore_errors: yes
 
     - name: Remove default from longhorn
       shell: kubectl patch storageclass longhorn -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
-      environment:
-        KUBECONFIG: "{{ kubeconfig }}"
       ignore_errors: yes
