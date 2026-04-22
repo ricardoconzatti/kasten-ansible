@@ -1,5 +1,5 @@
-- name: Create Cloudflare DNS routes
-  hosts: all
+- name: Create DNS routes
+  hosts: cloudflare
   become: yes
 
   vars:
