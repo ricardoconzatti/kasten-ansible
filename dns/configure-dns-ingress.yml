@@ -27,6 +27,7 @@
         block: |
           - hostname: {{ item.name }}-{{ labid }}.{{ domain }}
             service: http://{{ service_ip }}:{{ item.port }}
+        unsafe_writes: true
       loop: "{{ apps }}"
 
     - name: Restart cloudflared container
