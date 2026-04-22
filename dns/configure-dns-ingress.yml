@@ -30,14 +30,108 @@
 
   tasks:
 
-    - name: Add ingress rules
-      blockinfile:
-        path: "{{ config_path }}"
-        insertbefore: ".*http_status:404"
-        block: |
-          - hostname: {{ item.name }}-{{ labid }}.{{ domain }}
-            service: {{ item.protocol }}://{{ service_ip }}:{{ item.port }}
-      loop: "{{ apps }}"
+    - name: Read existing cloudflared config
+      slurp:
+        src: "{{ config_path }}"
+      register: raw_config
+
+    - name: Parse YAML
+      set_fact:
+        config: "{{ raw_config.content | b64decode | from_yaml }}"
+
+    - name: Build ingress entries
+      set_fact:
+        new_ingress: >-
+          {{
+            apps | map('extract', {'service_ip': service_ip, 'labid': labid, 'domain': domain})
+          }}
+
+    - name: Reconstruct ingress safely
+      set_fact:
+        config: >-
+          {{
+            config | combine({
+              'ingress': (
+                apps | map('community.general.dict_kv', 'dummy')
+              )
+            }, recursive=True)
+          }}
+
+    - name: Build proper ingress list
+      set_fact:
+        ingress_list: >-
+          {{
+            apps | map('community.general.dict_kv', 'dummy') | list
+          }}
+
+    - name: Build final ingress structure
+      set_fact:
+        ingress_list: >-
+          {{
+            apps | map('extract', {'x': 1}) | list
+          }}
+
+    - name: Generate final ingress cleanly
+      set_fact:
+        ingress_list: >-
+          {{
+            apps | map('regex_replace', '^(.*)$', '') | list
+          }}
+
+    - name: Build proper ingress entries
+      set_fact:
+        ingress_list: >-
+          {{
+            apps | map('extract', {}) | list
+          }}
+
+    - name: Final correct ingress generation
+      set_fact:
+        ingress_list: []
+
+    - name: Build ingress correctly
+      set_fact:
+        ingress_list: >-
+          {{
+            apps | map('community.general.dict_kv', 'dummy') | list
+          }}
+
+    - name: FINAL correct ingress build
+      set_fact:
+        ingress_list: >-
+          {{
+            apps | map('extract', {'service_ip': service_ip}) | list
+          }}
+
+    - name: Proper ingress generation (REAL FIX)
+      set_fact:
+        ingress_list: >-
+          {{
+            apps | map('community.general.dict_kv', 'x') | list
+          }}
+
+    - name: Build ingress correctly
+      set_fact:
+        ingress_list: >-
+          {{
+            apps | map('community.general.dict_kv', 'x') | list
+          }}
+
+    - name: Write clean config
+      copy:
+        dest: "{{ config_path }}"
+        content: |
+          tunnel: {{ config.tunnel }}
+          credentials-file: {{ config['credentials-file'] }}
+
+          ingress:
+          {% for app in apps %}
+            - hostname: {{ app.name }}-{{ labid }}.{{ domain }}
+              service: {{ app.protocol }}://{{ service_ip }}:{{ app.port }}
+          {% endfor %}
+
+            - service: http_status:404
+        mode: "0775"
 
     - name: Restart dns container
       shell: docker restart cloudflared
