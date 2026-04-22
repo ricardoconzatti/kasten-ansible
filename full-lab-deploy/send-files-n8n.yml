@@ -31,6 +31,7 @@
         body_format: json
         body:
           recipient_email: "{{ recipient_email }}"
+          labid: "{{ labid }}"
           data: "{{ artifact_raw.content | b64decode | from_json }}"
           pdf:
             filename: "lab-instructions.pdf"
