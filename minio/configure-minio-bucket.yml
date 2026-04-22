@@ -9,18 +9,18 @@
     mc_download_url: "https://dl.min.io/client/mc/release/linux-amd64/mc"
 
     minio_alias: "minio"
-    minio_access_key: "{{ lookup('env', 'minio_access_key') }}"
-    minio_secret_key: "{{ lookup('env', 'minio_secret_key') }}"
+    minio_access_key: "{{ minio_access_key }}"
+    minio_secret_key: "{{ minio_secret_key }}"
     retention: "7d"
     
-    bucket_name: "veeam-kasten-lab-{{ labid }}"
+    bucket_name: "kasten-lab-{{ labid }}"
     region: "sp-conza-1"
 
-    user_name: "veeam.kasten.{{ labid }}"
+    user_name: "kasten.lab.{{ labid }}"
     user_password: "vee@m123"
 
-    policy_name: "veeam-kasten-policy"
-    policy_file: "/tmp/veeam-kasten-policy.json"
+    policy_name: "kasten-lab-policy"
+    policy_file: "/tmp/kasten-lab-policy.json"
 
   tasks:
 
