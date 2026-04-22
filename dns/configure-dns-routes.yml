@@ -1,5 +1,5 @@
 - name: Create DNS routes
-  hosts: cloudflare
+  hosts: kasten-lab-dns
   become: yes
 
   vars:
