@@ -3,8 +3,7 @@
   become: yes
 
   vars:
-    kubeconfig: /etc/rancher/k3s/k3s.yaml
-    domain: "{{ lookup('env', 'domain') }}"
+    domain: "{{ domain }}"
     kasten_host: "kasten-{{ inventory_hostname.split('.')[-1] }}.{{ domain }}"
     use_artifact: "{{ use_artifact | default(false) }}"
 
