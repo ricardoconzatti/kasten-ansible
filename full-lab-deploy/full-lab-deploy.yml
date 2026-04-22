@@ -20,7 +20,7 @@
 - import_playbook: ../k3s/deploy-k3s-single-node.yml
 
 # longhorn
-- import_playbook: ../k3s-longhorn/deploy-longhorn-single-node.yml
+- import_playbook: ../longhorn/deploy-longhorn-single-node.yml
 
 # veeam kasten
 - import_playbook: ../kasten/deploy-kasten.yml
