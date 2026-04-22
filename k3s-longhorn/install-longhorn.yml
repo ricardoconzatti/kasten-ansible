@@ -4,6 +4,9 @@
 
   vars:
     longhornVersion: "1.9.0"
+    
+  environment:
+    KUBECONFIG: "{{ kubeconfig }}"
 
   tasks:
 
