@@ -2,9 +2,6 @@
   hosts: all
   become: yes
 
-  vars:
-    kubeconfig: /etc/rancher/k3s/k3s.yaml
-
   tasks:
 
     - name: Create Longhorn StorageClass
