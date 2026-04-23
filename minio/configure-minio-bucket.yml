@@ -1,5 +1,5 @@
 - name: Configure MinIO Bucket (for Kasten)
-  hosts: all
+  hosts: kasten-lab
   gather_facts: no
 
   vars:
