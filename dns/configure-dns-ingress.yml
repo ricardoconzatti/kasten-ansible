@@ -20,7 +20,7 @@
 
       - name: world
         port: 3022
-        protocol: http
+        protocol: https
 
       - name: kstatus
         port: 31051
