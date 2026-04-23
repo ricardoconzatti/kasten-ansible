@@ -1,5 +1,5 @@
 - name: Configure Storage and Snapshot Classes
-  hosts: all
+  hosts: kasten-lab
   become: yes
 
   tasks:
