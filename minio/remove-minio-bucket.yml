@@ -1,50 +1,56 @@
-- name: Remove MinIO Bucket (for Kasten)
+- name: Remove MinIO resources from artifact
   hosts: kasten-lab
+  become: yes
   gather_facts: no
 
   vars:
+    artifact_file: "{{ labdir }}/artifact.json"
+
     mc_path: "{{ labdir }}/mc"
     mc: "{{ mc_path }}"
-    mc_download_url: "https://dl.min.io/client/mc/release/linux-amd64/mc"
 
     minio_alias: "minio"
     minio_access_key: "{{ minio_access_key }}"
     minio_secret_key: "{{ minio_secret_key }}"
 
-    bucket_name: "kasten-lab-{{ labid }}"
-
   tasks:
 
-    - name: Download MinIO Client
-      get_url:
-        url: "{{ mc_download_url }}"
-        dest: "{{ mc_path }}"
-        mode: '0755'
+    - name: Read artifact.json
+      slurp:
+        src: "{{ artifact_file }}"
+      register: artifact_raw
 
-    - name: Set MinIO alias
+    - name: Parse JSON
+      set_fact:
+        artifact: "{{ artifact_raw.content | b64decode | from_json }}"
+
+    - name: Extract MinIO data
+      set_fact:
+        minio_bucket: "{{ artifact.minio.bucket }}"
+        minio_user: "{{ artifact.minio.accessKey }}"
+
+    - name: Configure MinIO alias
       shell: >
         {{ mc }} alias set {{ minio_alias }} {{ minio_url }}
-        {{ minio_access_key }} {{ minio_secret_key }} --insecure
-      register: alias_result
+        {{ minio_access_key }} {{ minio_secret_key }}
       changed_when: false
 
-    - name: Remove all objects (recursive + versions)
+    - name: Remove MinIO bucket (force)
       shell: >
-        {{ mc }} rm {{ minio_alias }}/{{ bucket_name }}
-        --recursive --force --versions --insecure
-      register: rm_objects
+        {{ mc }} rm --recursive --force {{ minio_alias }}/{{ minio_bucket }}
+      register: bucket_remove
       failed_when: false
+      changed_when: "'Removed' in bucket_remove.stdout"
 
-    - name: Remove bucket
+    - name: Remove MinIO user
       shell: >
-        {{ mc }} rb {{ minio_alias }}/{{ bucket_name }}
-        --force --insecure
-      register: rb_result
+        {{ mc }} admin user remove {{ minio_alias }} {{ minio_user }}
+      register: user_remove
       failed_when: false
+      changed_when: "'Removed' in user_remove.stdout"
 
-    - name: Debug removal
+    - name: Summary
       debug:
-        msg:
-          - "Bucket removal attempted: {{ bucket_name }}"
-          - "rm output: {{ rm_objects.stdout | default('') }}"
-          - "rb output: {{ rb_result.stdout | default('') }}"
+        msg: |
+          Bucket removed: {{ minio_bucket }}
+          User removed: {{ minio_user }}
