@@ -18,6 +18,10 @@
         port: 80
         protocol: http
 
+      - name: restored-homer
+        port: 80
+        protocol: http
+
       - name: world
         port: 443
         protocol: https
