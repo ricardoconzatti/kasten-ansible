@@ -37,7 +37,7 @@
 
     - name: Remove MinIO bucket (force)
       shell: >
-        {{ mc }} rm --recursive --force {{ minio_alias }}/{{ minio_bucket }} --insecure
+        {{ mc }} rb {{ minio_alias }}/{{ minio_bucket }} --force --insecure
       register: bucket_remove
       failed_when: false
       changed_when: "'Removed' in bucket_remove.stdout"
