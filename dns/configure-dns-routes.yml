@@ -9,6 +9,7 @@
       - kasten
       - longhorn
       - homer
+      - restored-homer
       - world
 
   tasks:
