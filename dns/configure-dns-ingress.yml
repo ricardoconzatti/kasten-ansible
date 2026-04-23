@@ -19,12 +19,8 @@
         protocol: http
 
       - name: world
-        port: 3022
+        port: 443
         protocol: https
-
-      - name: kstatus
-        port: 31051
-        protocol: http
 
     service_ip: "{{ ip_address }}"
 
@@ -50,10 +46,14 @@
           {% for app in apps %}
             - hostname: {{ app.name }}-{{ labid }}.{{ domain }}
               service: {{ app.protocol }}://{{ service_ip }}:{{ app.port }}
+          {% if app.name == 'world' %}
+              originRequest:
+                noTLSVerify: true
+          {% endif %}
           {% endfor %}
 
             - service: http_status:404
         mode: "0775"
-        
+
     - name: Restart dns container
       shell: docker restart cloudflared
