@@ -30,7 +30,7 @@
 
   tasks:
 
-    - name: Read existing cloudflared config
+    - name: Read existing config
       slurp:
         src: "{{ config_path }}"
       register: raw_config
@@ -39,17 +39,7 @@
       set_fact:
         config: "{{ raw_config.content | b64decode | from_yaml }}"
 
-    - name: Build ingress safely
-      set_fact:
-        ingress: >-
-          {{
-            apps | map('community.general.dict', {
-              'hostname': '',
-              'service': ''
-            }) | list
-          }}
-
-    - name: Write clean config
+    - name: Rewrite cloudflared config safely
       copy:
         dest: "{{ config_path }}"
         content: |
@@ -64,6 +54,6 @@
 
             - service: http_status:404
         mode: "0775"
-
+        
     - name: Restart dns container
       shell: docker restart cloudflared
