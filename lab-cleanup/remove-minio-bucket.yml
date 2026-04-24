@@ -51,4 +51,4 @@
 
     - name: Summary
       debug:
-        msg: Bucket removed: {{ minio_bucket }} | User removed: {{ minio_user }}
+        msg: Bucket removed {{ minio_bucket }} | User removed {{ minio_user }}
