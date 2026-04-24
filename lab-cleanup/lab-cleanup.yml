@@ -1,0 +1,4 @@
+# IMPORT PLAYBOOKS
+
+# minio
+- import_playbook: remove-minio-bucket.yml
