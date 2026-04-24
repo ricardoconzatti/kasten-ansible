@@ -25,7 +25,7 @@
 
     - name: Send to n8n webhook
       uri:
-        url: "{{ n8n_webhook_email }}"
+        url: "{{ n8n_webhook_files }}"
         method: POST
         body_format: json
         body:
