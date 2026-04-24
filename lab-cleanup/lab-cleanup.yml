@@ -12,3 +12,6 @@
 
 # minio
 - import_playbook: remove-minio-bucket.yml
+
+# vmware vm
+- import_playbook: remove-lab-vm.yml
