@@ -4,6 +4,17 @@
 
   tasks:
 
+    - name: Log update (site)
+      uri:
+        url: "{{ site_webhook_logs }}"
+        method: POST
+        body_format: json
+        body:
+          lab_id: "{{ labid }}"
+          message: "{{ '%m/%d/%Y %I:%M %p' | strftime }} - instaling K3s"
+        headers:
+          Content-Type: "application/json"
+
     - name: Disable swap immediately
       command: swapoff -a
       when: ansible_swaptotal_mb > 0
