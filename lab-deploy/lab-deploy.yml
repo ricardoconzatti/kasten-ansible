@@ -89,7 +89,7 @@
         body:
           lab_id: "{{ labid }}"
           message: "Finishing ansible playbook"
-          detail: "Total lab deploy time: {{ duration_pretty }}"
+          detail: "Total lab deploy time: {{ lab_duration_pretty }}"
         headers:
           Content-Type: "application/json"
         validate_certs: no
