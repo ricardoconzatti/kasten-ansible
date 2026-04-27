@@ -9,6 +9,18 @@
 
   tasks:
 
+    - name: Log update (site)
+      uri:
+        url: "{{ site_webhook_logs }}"
+        method: POST
+        body_format: json
+        body:
+          lab_id: "{{ labid }}"
+          message: "Sending user e-mail with attachments (2/3)"
+        headers:
+          Content-Type: "application/json"
+        validate_certs: no
+
     - name: Read artifact JSON
       slurp:
         src: "{{ file }}"
