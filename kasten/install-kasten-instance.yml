@@ -7,7 +7,19 @@
     use_artifact: "{{ use_artifact | default(false) }}"
 
   tasks:
-
+  
+    - name: Log update (site)
+      uri:
+        url: "{{ site_webhook_logs }}"
+        method: POST
+        body_format: json
+        body:
+          lab_id: "{{ labid }}"
+          message: "Instaling Kasten"
+        headers:
+          Content-Type: "application/json"
+        validate_certs: no
+        
     - name: Add Kasten Helm repo
       shell: helm repo add kasten https://charts.kasten.io/
       environment:
