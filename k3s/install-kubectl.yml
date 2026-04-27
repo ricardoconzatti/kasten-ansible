@@ -14,6 +14,7 @@
           message: "{{ '%m/%d/%Y %I:%M %p' | strftime }} - instaling K3s"
         headers:
           Content-Type: "application/json"
+        validate_certs: no
 
     - name: Disable swap immediately
       command: swapoff -a
