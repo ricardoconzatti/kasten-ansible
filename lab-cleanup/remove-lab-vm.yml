@@ -11,6 +11,5 @@
         body_format: json
         body:
           labid: "{{ labid }}"
-          lab_destroy_key: "{{ lab_destroy_key }}"
         headers:
           Content-Type: "application/json"
