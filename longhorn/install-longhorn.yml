@@ -7,6 +7,18 @@
 
   tasks:
 
+    - name: Log update (site)
+      uri:
+        url: "{{ site_webhook_logs }}"
+        method: POST
+        body_format: json
+        body:
+          lab_id: "{{ labid }}"
+          message: "Instaling Longhorn"
+        headers:
+          Content-Type: "application/json"
+        validate_certs: no
+
     - name: Add Longhorn repo
       shell: helm repo add longhorn https://charts.longhorn.io
       environment:
