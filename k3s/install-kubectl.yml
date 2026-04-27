@@ -11,7 +11,7 @@
         body_format: json
         body:
           lab_id: "{{ labid }}"
-          message: "Instaling K3s"
+          message: "Instaling kubectl (prepare node)"
         headers:
           Content-Type: "application/json"
         validate_certs: no
