@@ -9,6 +9,18 @@
 
   tasks:
 
+    - name: Log update (site)
+      uri:
+        url: "{{ site_webhook_logs }}"
+        method: POST
+        body_format: json
+        body:
+          lab_id: "{{ labid }}"
+          message: "Deploying demo application - World"
+        headers:
+          Content-Type: "application/json"
+        validate_certs: no
+
     - name: Apply World persistent resources
       shell: >
         kubectl apply -f https://raw.githubusercontent.com/ricardoconzatti/demo/refs/heads/main/world-dev/Kubernetes/world-dev-persistent.yaml
