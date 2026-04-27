@@ -7,6 +7,18 @@
 
   tasks:
 
+    - name: Log update (site)
+      uri:
+        url: "{{ site_webhook_logs }}"
+        method: POST
+        body_format: json
+        body:
+          lab_id: "{{ labid }}"
+          message: "Instaling K3s"
+        headers:
+          Content-Type: "application/json"
+        validate_certs: no
+
     - name: Install K3s
       shell: curl -sfL https://get.k3s.io | sh -
       environment:
