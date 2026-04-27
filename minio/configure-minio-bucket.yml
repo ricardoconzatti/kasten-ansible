@@ -12,6 +12,7 @@
     minio_access_key: "{{ minio_access_key }}"
     minio_secret_key: "{{ minio_secret_key }}"
     retention: "1d"
+    retention_mode: "GOVERNANCE"
     
     bucket_name: "kasten-lab-{{ labid }}"
     region: "sp-conza-1"
@@ -95,9 +96,9 @@
       register: attach_result
       failed_when: false
 
-    - name: Set retention (COMPLIANCE)
+    - name: Set retention and retention mode
       shell: >
-        {{ mc }} retention set --default COMPLIANCE {{ retention }}
+        {{ mc }} retention set --default {{ retention_mode }} {{ retention }}
         {{ minio_alias }}/{{ bucket_name }} --insecure
       register: retention_result
       failed_when: false
