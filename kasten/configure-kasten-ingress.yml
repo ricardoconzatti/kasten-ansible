@@ -8,18 +8,6 @@
 
   tasks:
 
-    - name: Log update (site)
-      uri:
-        url: "{{ site_webhook_logs }}"
-        method: POST
-        body_format: json
-        body:
-          lab_id: "{{ labid }}"
-          message: "Configuring Kasten ingress"
-        headers:
-          Content-Type: "application/json"
-        validate_certs: no
-
     - name: Create Kasten Ingress
       shell: |
         cat <<EOF | kubectl apply -f -
@@ -48,6 +36,19 @@
     - name: Show Kasten URL
       debug:
         msg: "Kasten URL: https://{{ kasten_host }}/k10/#"
+
+    - name: Log update (site)
+      uri:
+        url: "{{ site_webhook_logs }}"
+        method: POST
+        body_format: json
+        body:
+          lab_id: "{{ labid }}"
+          message: "Configuring Kasten ingress"
+          detail: "Kasten URL: https://{{ kasten_host }}/k10/#"
+        headers:
+          Content-Type: "application/json"
+        validate_certs: no
 
     - name: Add Kasten (ingress) to artifact
       include_role:
