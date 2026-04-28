@@ -12,6 +12,7 @@
         body:
           lab_id: "{{ labid }}"
           message: "Configuring StorageClass / VolumeSnapshotClass"
+          detail: "annotations: k10.kasten.io/is-snapshot-class: 'true'"
         headers:
           Content-Type: "application/json"
         validate_certs: no
