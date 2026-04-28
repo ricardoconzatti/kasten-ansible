@@ -11,7 +11,7 @@
         body_format: json
         body:
           lab_id: "{{ labid }}"
-          message: "Instaling kubectl (prepare node)"
+          message: "Preparing node (swap, snapd, kubectl, nfs)"
         headers:
           Content-Type: "application/json"
         validate_certs: no
