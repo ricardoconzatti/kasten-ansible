@@ -1,16 +1,21 @@
 These are a set of Ansible playbooks used to deploy a single-node Kubernetes cluster with local storage, configure CSI drivers, set up a Veeam Kasten instance, create an immutable bucket for Kasten backups, and finally deploy sample applications for testing purposes. Additionally, the repository includes PowerCLI scripts for VMware environments, enabling automated virtual machine provisioning and lab lifecycle management.
 
-## stack
+## Stack
 - Ubuntu 24.04
 - K3s v1.33
 - Longhorn 1.9.0
 - CSI driver (snapshot controller) 6.2.1
-- Veeam Kasten 8.5.6
+- Veeam Kasten 8.5.6 (or latest)
 - MinIO 1.4.4 (needs to be deployed in advance)
 
-## demo applications
+## Demo Applications
 - [Homer demo](https://github.com/ricardoconzatti/demo/tree/main/homer-demo): Apache, PHP 8.4, and PostgreSQL 16 database
 - [World Dev demo](https://github.com/ricardoconzatti/demo/tree/main/world-dev): Node.js 20, MySQL 9 database, and Redis 7
+
+## Access & Lab Lifecycle
+Access to the lab is provisioned on demand. When a user requests access, an automated workflow generates a unique Lab ID and deploys the entire environment from scratch. Once provisioning is complete, access details are sent via email. The process takes about 12 minutes to conclude. Each lab environment is temporary. When the allocated time expires, the environment is fully deprovisioned, including all associated resources and data. This process is irreversible — it is not possible to recover a lab once it has been removed.
+
+Please note that this lab runs 100% on my personal homelab infrastructure. Feel free to use it to learn and improve your knowledge of Veeam Kasten, but use it responsibly and avoid unnecessary resource consumption. This helps ensure the lab remains available and responsive for everyone.
 
 ---
 
