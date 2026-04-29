@@ -17,7 +17,7 @@ Access to the lab is provisioned on demand. When a user requests access, an auto
 
 **Please note that this lab runs 100% on my personal homelab infrastructure. Feel free to use it to learn and improve your knowledge of Veeam Kasten, but use it responsibly and avoid unnecessary resource consumption. This helps ensure the lab remains available and responsive for everyone.**
 
-**[Request Lab Access](https://kasten-lab.conza.xyz)**
+**[Request Lab Access](https://kasten-lab.conza.xyz)** (Beta testers token KASTEN-WM86-R9US)
 
 ---
 
