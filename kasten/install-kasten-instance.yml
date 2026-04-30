@@ -64,7 +64,7 @@
         body_format: json
         body:
           lab_id: "{{ labid }}"
-          message: "Instaling Kasten"
+          message: "Installing Kasten"
           detail: "Version: {{ (helm_output.stdout | from_json)[0].app_version }}"
         headers:
           Content-Type: "application/json"
