@@ -33,7 +33,7 @@
         body:
           lab_id: "{{ labid }}"
           message: "Configuring MinIO immutable bucket"
-          detail: "Bucket: {{ bucket_name }} | Access key: {{ user_name }} | Retention: {{ retention_mode }} ({{ retention }})"
+          detail: "Bucket: {{ bucket_name }} | Retention: {{ retention_mode }} ({{ retention }})"
         headers:
           Content-Type: "application/json"
         validate_certs: no
