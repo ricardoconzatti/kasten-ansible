@@ -4,6 +4,19 @@
 
   tasks:
 
+    - name: Log update (site)
+      uri:
+        url: "{{ site_webhook_logs }}"
+        method: POST
+        body_format: json
+        body:
+          lab_id: "{{ labid }}"
+          message: "🧩 Platform"
+          source: "system"
+        headers:
+          Content-Type: "application/json"
+        validate_certs: no
+
     - name: Disable swap immediately
       command: swapoff -a
       when: ansible_swaptotal_mb > 0
