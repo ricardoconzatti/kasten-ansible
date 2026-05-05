@@ -88,8 +88,9 @@
         body_format: json
         body:
           lab_id: "{{ labid }}"
-          message: "Finishing provisioning (ansible playbook)"
-          detail: "Total lab deploy time: {{ lab_duration_pretty }}"
+          message: "⚙️ Ansible provisioning finished"
+          detail: "Lab deployment time: {{ lab_duration_pretty }}"
+          source: "system"
         headers:
           Content-Type: "application/json"
         validate_certs: no
