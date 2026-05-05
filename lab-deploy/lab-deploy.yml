@@ -26,6 +26,19 @@
 
 # IMPORT PLAYBOOKS
 
+    - name: Log update (site)
+      uri:
+        url: "{{ site_webhook_logs }}"
+        method: POST
+        body_format: json
+        body:
+          lab_id: "{{ labid }}"
+          message: "🧩 Platform"
+          source: "system"
+        headers:
+          Content-Type: "application/json"
+        validate_certs: no
+
 # k3s
 - import_playbook: ../k3s/deploy-k3s-single-node.yml
 
