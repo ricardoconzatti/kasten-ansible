@@ -11,7 +11,8 @@
         body_format: json
         body:
           lab_id: "{{ labid }}"
-          message: "Preparing node (swap, snapd, kubectl, nfs)"
+          message: "⚙ Platform"
+          source: "system"
         headers:
           Content-Type: "application/json"
         validate_certs: no
@@ -45,3 +46,16 @@
       retries: 10
       delay: 10
       until: apt_result is succeeded
+
+    - name: Log update (site)
+      uri:
+        url: "{{ site_webhook_logs }}"
+        method: POST
+        body_format: json
+        body:
+          lab_id: "{{ labid }}"
+          message: "Node prepared"
+          detail: "swap, snapd, kubectl, nfs"
+        headers:
+          Content-Type: "application/json"
+        validate_certs: no
