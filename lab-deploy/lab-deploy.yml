@@ -4,6 +4,7 @@
     labid: "{{ lookup('env', 'labid') }}"
     recipient_email: "{{ lookup('env', 'recipient_email') }}"
     use_artifact: true
+    vm_creation_seconds: 90
 
   tasks:
     - name: Register start time
@@ -53,9 +54,9 @@
         lab_end_time: "{{ lookup('pipe', 'date +%s') | int }}"
       run_once: true
 
-    - name: Calculate total duration
+    - name: Calculate total duration (including VM creation)
       set_fact:
-        lab_duration_seconds: "{{ (lab_end_time | int) - (lab_start_time | int) }}"
+        lab_duration_seconds: "{{ ((lab_end_time | int) - (lab_start_time | int)) + (vm_creation_seconds | int) }}"
       run_once: true
 
     - name: Calculate duration parts
