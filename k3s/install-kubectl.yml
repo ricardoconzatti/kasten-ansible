@@ -55,7 +55,7 @@
         body:
           lab_id: "{{ labid }}"
           message: "Node prepared"
-          detail: "swap, snapd, kubectl, nfs"
+          detail: "swap, snapd, kubectl, helm, nfs"
         headers:
           Content-Type: "application/json"
         validate_certs: no
