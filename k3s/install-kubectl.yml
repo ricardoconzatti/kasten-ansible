@@ -11,7 +11,7 @@
         body_format: json
         body:
           lab_id: "{{ labid }}"
-          message: "🏗 Platform"
+          message: "🧩 Platform"
           source: "system"
         headers:
           Content-Type: "application/json"
