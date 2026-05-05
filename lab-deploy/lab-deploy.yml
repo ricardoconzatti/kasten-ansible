@@ -4,7 +4,6 @@
     labid: "{{ lookup('env', 'labid') }}"
     recipient_email: "{{ lookup('env', 'recipient_email') }}"
     use_artifact: true
-    vm_creation_seconds: 90
 
   tasks:
     - name: Register start time
