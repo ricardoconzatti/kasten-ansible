@@ -14,7 +14,7 @@
         body_format: json
         body:
           lab_id: "{{ labid }}"
-          message: "💾 Storage Configuration"
+          message: "🗄️ Storage Configuration"
           source: "system"
         headers:
           Content-Type: "application/json"
@@ -47,7 +47,7 @@
         body_format: json
         body:
           lab_id: "{{ labid }}"
-          message: "CSI Snapshot & Controller ready"
+          message: "CSI Snapshot and Controller ready"
           detail: "Version: {{ snapshot_version }}"
         headers:
           Content-Type: "application/json"
