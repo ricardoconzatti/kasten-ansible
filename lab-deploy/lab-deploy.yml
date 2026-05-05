@@ -77,6 +77,19 @@
 # minio (repo)
 - import_playbook: ../minio/configure-minio-bucket.yml
 
+    - name: Log update (site)
+      uri:
+        url: "{{ site_webhook_logs }}"
+        method: POST
+        body_format: json
+        body:
+          lab_id: "{{ labid }}"
+          message: "📦 Demo Applications"
+          source: "system"
+        headers:
+          Content-Type: "application/json"
+        validate_certs: no
+
 # demo app
 - import_playbook: ../apps/deploy-homer-app.yml
 - import_playbook: ../apps/deploy-world-app.yml
