@@ -21,7 +21,7 @@
         allowVolumeExpansion: true
         EOF
 
-    - name: Create VolumeSnapshotClass
+    - name: Create Longhorn VolumeSnapshotClass
       shell: |
         cat <<EOF | kubectl apply -f -
         apiVersion: snapshot.storage.k8s.io/v1
@@ -51,8 +51,8 @@
         body_format: json
         body:
           lab_id: "{{ labid }}"
-          message: "StorageClass & VolumeSnapshotClass configured"
-          detail: "annotations: k10.kasten.io/is-snapshot-class: 'true'"
+          message: "StorageClass and VolumeSnapshotClass configured"
+          detail: "storageclass.kubernetes.io/is-default-class: 'true' | k10.kasten.io/is-snapshot-class: 'true'"
         headers:
           Content-Type: "application/json"
         validate_certs: no
