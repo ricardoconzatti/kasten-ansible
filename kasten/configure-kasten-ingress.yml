@@ -44,8 +44,8 @@
         body_format: json
         body:
           lab_id: "{{ labid }}"
-          message: "Configuring Kasten ingress"
-          detail: "Kasten URL: https://{{ kasten_host }}/k10/#"
+          message: "Kasten ingress"
+          detail: "https://{{ kasten_host }}/k10/#"
         headers:
           Content-Type: "application/json"
         validate_certs: no
