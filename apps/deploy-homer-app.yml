@@ -9,6 +9,19 @@
 
   tasks:
 
+    - name: Log update (site)
+      uri:
+        url: "{{ site_webhook_logs }}"
+        method: POST
+        body_format: json
+        body:
+          lab_id: "{{ labid }}"
+          message: "📦 Demo Applications"
+          source: "system"
+        headers:
+          Content-Type: "application/json"
+        validate_certs: no
+
     - name: Apply Homer persistent resources
       shell: >
         kubectl apply -f https://raw.githubusercontent.com/ricardoconzatti/demo/refs/heads/main/homer-demo/Kubernetes/homer-demo-persistent.yaml
