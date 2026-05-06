@@ -1,27 +1,29 @@
-- name: Install Kubernetes Dashboard
+- name: Install Headlamp
   hosts: kasten-lab
   become: yes
 
   vars:
     kubeconfig: /etc/rancher/k3s/k3s.yaml
+    headlamp_version: "0.29.0"
 
   tasks:
 
-    - name: Install Kubernetes Dashboard
-      shell: kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v3.0.0/aio/deploy/recommended.yaml
+    - name: Add Headlamp Helm repo
+      shell: helm repo add headlamp https://kubernetes-sigs.github.io/headlamp/
       environment:
         KUBECONFIG: "{{ kubeconfig }}"
+      ignore_errors: true
 
     - name: Update Helm repos
       shell: helm repo update
       environment:
         KUBECONFIG: "{{ kubeconfig }}"
 
-    - name: Install Dashboard
+    - name: Install Headlamp
       shell: |
-        helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard \
-          --version "{{ dashboard_version }}" \
-          --namespace kubernetes-dashboard \
+        helm upgrade --install headlamp headlamp/headlamp \
+          --version "{{ headlamp_version }}" \
+          --namespace headlamp \
           --create-namespace
       environment:
         KUBECONFIG: "{{ kubeconfig }}"
