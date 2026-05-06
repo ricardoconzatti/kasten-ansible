@@ -4,8 +4,23 @@
 
   vars:
     kubeconfig: /etc/rancher/k3s/k3s.yaml
+    use_artifact: "{{ use_artifact | default(false) }}"
 
   tasks:
+
+    - name: Log update (site)
+      uri:
+        url: "{{ site_webhook_logs }}"
+        method: POST
+        body_format: json
+        body:
+          lab_id: "{{ labid }}"
+          message: "📊 Kubernetes Dashboard"
+          source: "system"
+        headers:
+          Content-Type: "application/json"
+          x-webhook-secret: "{{ webhook_secret }}"
+        validate_certs: no
 
     - name: Add Headlamp Helm repo
       shell: helm repo add headlamp https://kubernetes-sigs.github.io/headlamp/
@@ -25,3 +40,16 @@
           --create-namespace
       environment:
         KUBECONFIG: "{{ kubeconfig }}"
+
+    - name: Log update (site)
+      uri:
+        url: "{{ site_webhook_logs }}"
+        method: POST
+        body_format: json
+        body:
+          lab_id: "{{ labid }}"
+          message: "Dashboard deployed"
+        headers:
+          Content-Type: "application/json"
+          x-webhook-secret: "{{ webhook_secret }}"
+        validate_certs: no
