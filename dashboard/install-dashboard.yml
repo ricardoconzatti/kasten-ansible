@@ -4,7 +4,6 @@
 
   vars:
     kubeconfig: /etc/rancher/k3s/k3s.yaml
-    headlamp_version: "0.29.0"
 
   tasks:
 
@@ -21,9 +20,8 @@
 
     - name: Install Headlamp
       shell: |
-        helm upgrade --install headlamp headlamp/headlamp \
-          --version "{{ headlamp_version }}" \
-          --namespace headlamp \
+        helm upgrade --install my-headlamp headlamp/headlamp \
+          --namespace kube-system \
           --create-namespace
       environment:
         KUBECONFIG: "{{ kubeconfig }}"
