@@ -44,7 +44,7 @@
         body_format: json
         body:
           lab_id: "{{ labid }}"
-          message: "Dashboard ingress"
+          message: "Dashboard ingress configured"
           detail: "https://{{ headlamp_host }}"
         headers:
           Content-Type: "application/json"
