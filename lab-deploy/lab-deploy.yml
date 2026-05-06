@@ -35,6 +35,9 @@
 # veeam kasten
 - import_playbook: ../kasten/deploy-kasten.yml
 
+# dashboard
+- import_playbook: ../dashboard/deploy-dashboard.yml
+
 # minio (repo)
 - import_playbook: ../minio/configure-minio-bucket.yml
 
