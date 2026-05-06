@@ -1,37 +1,27 @@
-- name: Configure Headlamp Ingress
+- name: Install Headlamp
   hosts: kasten-lab
   become: yes
 
   vars:
-    headlamp_host: "dashboard-{{ labid }}.{{ domain }}"
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
 
   tasks:
 
-    - name: Create Headlamp Ingress
-      shell: |
-        cat <<EOF | kubectl apply -f -
-        apiVersion: networking.k8s.io/v1
-        kind: Ingress
-        metadata:
-          name: headlamp-ingress
-          namespace: headlamp
-          annotations:
-            traefik.ingress.kubernetes.io/router.entrypoints: web
-        spec:
-          ingressClassName: traefik
-          rules:
-          - host: {{ headlamp_host }}
-            http:
-              paths:
-              - path: /
-                pathType: Prefix
-                backend:
-                  service:
-                    name: headlamp
-                    port:
-                      number: 80
-        EOF
+    - name: Add Headlamp Helm repo
+      shell: helm repo add headlamp https://kubernetes-sigs.github.io/headlamp/
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
+      ignore_errors: true
 
-    - name: Show Headlamp URL
-      debug:
-        msg: "Headlamp URL: https://{{ headlamp_host }}"
+    - name: Update Helm repos
+      shell: helm repo update
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
+
+    - name: Install Headlamp
+      shell: |
+        helm upgrade --install my-headlamp headlamp/headlamp \
+          --namespace kube-system \
+          --create-namespace
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
