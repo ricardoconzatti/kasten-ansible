@@ -56,5 +56,5 @@
         name: artifact
       vars:
         artifact_section:
-          kasten:
+          dashboard:
             url: "https://{{ headlamp_host }}"
