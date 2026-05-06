@@ -69,6 +69,7 @@
           detail: "{{ k3s_version_out.stdout_lines[0] }}"
         headers:
           Content-Type: "application/json"
+          x-webhook-secret: "{{ webhook_secret }}"
         validate_certs: no
 
     - name: Add K3s to artifact
