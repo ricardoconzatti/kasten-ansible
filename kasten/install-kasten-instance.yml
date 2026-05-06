@@ -19,6 +19,7 @@
           source: "system"
         headers:
           Content-Type: "application/json"
+          x-webhook-secret: "{{ webhook_secret }}"
         validate_certs: no
   
     - name: Add Kasten Helm repo
@@ -81,6 +82,7 @@
           detail: "Version: {{ (helm_output.stdout | from_json)[0].app_version }}"
         headers:
           Content-Type: "application/json"
+          x-webhook-secret: "{{ webhook_secret }}"
         validate_certs: no
 
     - name: Add Kasten (version) to artifact
