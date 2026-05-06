@@ -27,7 +27,7 @@
                 pathType: Prefix
                 backend:
                   service:
-                    name: headlamp
+                    name: headlamp-dash
                     port:
                       number: 80
         EOF
