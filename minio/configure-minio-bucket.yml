@@ -151,6 +151,7 @@
           detail: "Retention: {{ retention_mode }} ({{ retention }})"
         headers:
           Content-Type: "application/json"
+          x-webhook-secret: "{{ webhook_secret }}"
         validate_certs: no
 
     - name: Add MinIO to artifact
