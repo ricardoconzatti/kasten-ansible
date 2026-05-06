@@ -2,7 +2,7 @@ These are a set of Ansible playbooks used to deploy a single-node Kubernetes clu
 
 ## Stack
 - Ubuntu 24.04
-- K3s/Kubernetes v1.33
+- K3s/Kubernetes 1.33.0+k3s1
 - Longhorn 1.9.0
 - CSI driver (snapshot controller) 6.2.1
 - Veeam Kasten 8.5.6
