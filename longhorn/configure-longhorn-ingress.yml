@@ -48,6 +48,7 @@
           detail: "https://{{ longhorn_host }}"
         headers:
           Content-Type: "application/json"
+          x-webhook-secret: "{{ webhook_secret }}"
         validate_certs: no
 
     - name: Add Longhorn to artifact
