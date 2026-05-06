@@ -1,0 +1,37 @@
+- name: Configure Dashboard Ingress
+  hosts: kasten-lab
+  become: yes
+
+  vars:
+    dashboard_host: "dashboard-{{ labid }}.{{ domain }}"
+
+  tasks:
+
+    - name: Create Dashboard Ingress
+      shell: |
+        cat <<EOF | kubectl apply -f -
+        apiVersion: networking.k8s.io/v1
+        kind: Ingress
+        metadata:
+          name: dashboard-ingress
+          namespace: kubernetes-dashboard
+          annotations:
+            traefik.ingress.kubernetes.io/router.entrypoints: web
+        spec:
+          ingressClassName: traefik
+          rules:
+          - host: {{ dashboard_host }}
+            http:
+              paths:
+              - path: /
+                pathType: Prefix
+                backend:
+                  service:
+                    name: kubernetes-dashboard
+                    port:
+                      number: 443
+        EOF
+
+    - name: Show Dashboard URL
+      debug:
+        msg: "Dashboard URL: https://{{ dashboard_host }}"
