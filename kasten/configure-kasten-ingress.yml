@@ -48,6 +48,7 @@
           detail: "https://{{ kasten_host }}/k10/#"
         headers:
           Content-Type: "application/json"
+          x-webhook-secret: "{{ webhook_secret }}"
         validate_certs: no
 
     - name: Add Kasten (ingress) to artifact
