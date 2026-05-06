@@ -1,0 +1,3 @@
+- import_playbook: install-dashboard.yml
+- import_playbook: configure-dashboard-serviceaccount-token.yml
+- import_playbook: configure-dashboard-ingress.yml
