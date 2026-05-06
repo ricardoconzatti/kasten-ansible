@@ -14,7 +14,7 @@
         kind: Ingress
         metadata:
           name: headlamp-ingress
-          namespace: headlamp
+          namespace: kube-system
           annotations:
             traefik.ingress.kubernetes.io/router.entrypoints: web
         spec:
