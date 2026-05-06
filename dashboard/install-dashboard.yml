@@ -1,0 +1,28 @@
+- name: Install Kubernetes Dashboard
+  hosts: kasten-lab
+  become: yes
+
+  vars:
+    kubeconfig: /etc/rancher/k3s/k3s.yaml
+
+  tasks:
+
+    - name: Add kubernetes-dashboard repo
+      shell: helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard/
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
+      ignore_errors: true
+
+    - name: Update Helm repos
+      shell: helm repo update
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
+
+    - name: Install Dashboard
+      shell: |
+        helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard \
+          --version "{{ dashboard_version }}" \
+          --namespace kubernetes-dashboard \
+          --create-namespace
+      environment:
+        KUBECONFIG: "{{ kubeconfig }}"
